@@ -1,23 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
 
-function App() {
+const App = () => {
+
+  const [userChoice, setUserChoice] = useState(null)
+  const [computerChoice, setComputerChoice] = useState(null)
+  const [result, setResult] = useState(null)
+  const choices = ['rock', 'paper', 'scissors']
+
+
+  const handleClick = (value) => {
+    setUserChoice(value)
+    randomChoice()
+  }
+
+  const randomChoice = () => { 
+    const randomNumber = parseInt(Math.random() * choices.length)
+    setComputerChoice(choices[randomNumber])
+  }
+
+  useEffect(() => {
+    const str = userChoice + computerChoice
+
+    switch (str){
+      case 'rockrock':
+      case 'scissorsscissors':
+      case 'paperpaper':
+        setResult("its a draw!")
+        break
+      
+      case 'rockscissors':
+      case 'paperrock':
+      case 'scissorspaper':
+        setResult('you won!')
+        break
+      
+      case 'scissorsrock':
+      case 'rockpaper':
+      case 'paperscissors':
+        setResult('you lose!')
+        break
+
+      default:
+        break
+    }
+  }, [computerChoice, userChoice])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>User Choice: {userChoice}</h1>
+      <h1>Computer Choice: {computerChoice}</h1>
+      { choices.map((choice, index) => 
+        <button key={index} onClick={() => handleClick(choice)}>{choice}</button>
+      )}
+      <h1>{result}</h1>
     </div>
   );
 }
